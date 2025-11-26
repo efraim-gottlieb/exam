@@ -68,6 +68,10 @@ def reate_tables():
     DBmanager.create_rooms_table()
     return {'sucsses': 'tables created'}
 
+@app.post('/save_soldiers_to_db')
+def save_soldiers_to_db():
+    DBmanager = DatabaseManager(DB_PATH)
+    DBmanager.import_soldiers_csv(soldiers_list)
 
 
 
