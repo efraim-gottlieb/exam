@@ -35,9 +35,8 @@ class DatabaseManager:
 
         # Read CSV content
         for row in soldiers:
-            print(row)
-        #     self.cursor.execute("""
-        #             INSERT INTO soldiers (id, FirstName, LastName, Gender, DistanceFromBase, PlacementStatus)
-        #             VALUES (?, ?, ?, ?, ?, ?)
-        #         """, (row['id'],row['FirstName'],row['LastName'],row['DistanceFromBase'],row['PlacementStatus']))
-        # self.connection.commit()
+            self.cursor.execute("""
+                    INSERT INTO soldiers (id, FirstName, LastName, Gender, DistanceFromBase, PlacementStatus)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (row['id'],row['FirstName'],row['LastName'],row['DistanceFromBase'],row['PlacementStatus']))
+        self.connection.commit()
