@@ -17,6 +17,14 @@ class DatabaseManager:
         DistanceFromBase INT NOT NULL,
         PlacementStatus TEXT NOT NULL)
         """)
+    def create_houses_table(self):
+       self.cursor.execute("""
+        CREATE TABLE IF NOT EXSIST houses (
+        id INTEGER PRIMARY KEY,
+        
+                           )
+""")
+
     def import_soldiers_csv(self, csv_content: bytes):
       try:
           # Read CSV content

@@ -4,13 +4,11 @@ from DBmanager import DatabaseManager
 from soldier import Soldier
 from houses_managment import HouseManager
 
-DB_PATH = 'data.sqlite'
-DBmanager = DatabaseManager(DB_PATH)
+
 app = FastAPI()
-
 HousesManager = HouseManager()
+soldiers_list = []
 
-soldiers_list= []
 
 @app.post("/assignWithCsv")
 async def upload_csv(file: UploadFile = File(...)):
@@ -56,4 +54,19 @@ def get_soldier_info(soldier_id):
         return {'soldier info': [so for so in soldiers_list if so.id == soldier_id]}
     else:
         return {'error': 'soldier not found'}
+
+@app.post('/DBinitializeScheme')
+def initializeScheme():
+    DB_PATH = 'data.sqlite'
+    global DBmanager
+    DBmanager = DatabaseManager(DB_PATH)
+    return {'Database created': DB_PATH}
+
+@app.post('/reate_tableS')
+def reate_tables():
+    DBmanager.create_soldiers_table()
+    DBmanager.create_houses_table()
+
+
+
 

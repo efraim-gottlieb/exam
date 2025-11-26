@@ -1,9 +1,10 @@
 from soldier import Soldier
 
 class Room:
-  def __init__(self, id):
+  def __init__(self, id, house):
     self.id = id
     self.soldiers:list[Soldier] = []
+    self.house = house
   def get_places(self):
     return 8 - len(self.soldiers)
     
@@ -13,6 +14,6 @@ class DwellingHose:
     DwellingHose.houses_counter += 1
     self.id = DwellingHose.houses_counter
     self.name = name
-    self.rooms = [Room(_+1) for _ in range(10)]
+    self.rooms = [Room(_+1, self.id) for _ in range(10)]
   def get_places(self):
     return 80 - sum([len(room.soldiers) for room in self.rooms])
