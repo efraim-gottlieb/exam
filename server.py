@@ -8,6 +8,7 @@ from houses_managment import HouseManager
 app = FastAPI()
 HousesManager = HouseManager()
 soldiers_list = []
+DB_PATH = 'data.sqlite'
 
 
 @app.post("/assignWithCsv")
@@ -57,16 +58,15 @@ def get_soldier_info(soldier_id):
 
 @app.post('/DBinitializeScheme')
 def initializeScheme():
-    DB_PATH = 'data.sqlite'
     DatabaseManager(DB_PATH)
     return {'Database created': DB_PATH}
 
 @app.post('/create_tables')
 def reate_tables():
-    DB_PATH = 'data.sqlite'
     DBmanager = DatabaseManager(DB_PATH)
     DBmanager.create_soldiers_table()
     DBmanager.create_rooms_table()
+    return {'sucsses': 'tables created'}
 
 
 
