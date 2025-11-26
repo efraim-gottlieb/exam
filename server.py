@@ -58,14 +58,15 @@ def get_soldier_info(soldier_id):
 @app.post('/DBinitializeScheme')
 def initializeScheme():
     DB_PATH = 'data.sqlite'
-    global DBmanager
-    DBmanager = DatabaseManager(DB_PATH)
+    DatabaseManager(DB_PATH)
     return {'Database created': DB_PATH}
 
-@app.post('/reate_tableS')
+@app.post('/create_tables')
 def reate_tables():
+    DB_PATH = 'data.sqlite'
+    DBmanager = DatabaseManager(DB_PATH)
     DBmanager.create_soldiers_table()
-    DBmanager.create_houses_table()
+    DBmanager.create_rooms_table()
 
 
 
