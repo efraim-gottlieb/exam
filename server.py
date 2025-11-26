@@ -7,8 +7,8 @@ DBmanager = DatabaseManager(DB_PATH)
 app = FastAPI()
 from soldier import Soldier
 from dwelling_hoses import DwellingHose
-
-
+from houses_managment import HouseManager
+a = HouseManager()
 
 @app.post("/assignWithCsv")
 async def upload_csv(file: UploadFile = File(...)):
@@ -24,29 +24,6 @@ async def upload_csv(file: UploadFile = File(...)):
     for soldier in reader:
         if soldier[0][0] == '8' and "".join([n for n in soldier[0] if int(n) in [i for i in range(0,10)]]) == soldier[0]:
             soldiers.append(Soldier(soldier[0], soldier[1], soldier[2], soldier[3], soldier[4], int(soldier[5]), 'waiting'))
-
-    hose_1= DwellingHose('Dorm A')
-    hose_2= DwellingHose('Dorm B')
-    hoses = [hose_1, hose_2]
-    soldiers.sort(key=lambda x: x.distance_from_base, reverse=True)
-    cur = 0 
-    deployed_soldiers = 0
-    for hose in hoses:
-        if not hose.get_places():
-             continue
-        for room in hose.rooms:
-            while len(room.soldiers) < 8:
-                    soldiers[cur].PlacementStatus = 'assigned'
-                    soldiers[cur].house = hose.name
-                    soldiers[cur].room = room.id
-                    room.soldiers.append(soldiers[cur])
-                    cur += 1
-                    deployed_soldiers += 1
-                    if cur >= len(soldiers):
-                         break
-    not_deployed_soldiers = len([so for so in soldiers if so.PlacementStatus != 'assigned'])
-    return {'deployed soldiers':deployed_soldiers,
-            'not_deployed_soldiers' : not_deployed_soldiers,
-            'soldiers' : soldiers
-            }
-
+            
+    result = a.soldier_deployment(soldiers)
+    return result
