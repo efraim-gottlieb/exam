@@ -22,11 +22,11 @@ async def upload_csv(file: UploadFile = File(...)):
     reader = list(csv.reader(csv_content.decode('utf-8').splitlines()))[1:]
     soldiers = []
     for soldier in reader:
-        if soldier[0][0] == '8':
+        if soldier[0][0] == '8' and "".join([n for n in soldier[0] if int(n) in [i for i in range(0,10)]]) == soldier[0]:
             soldiers.append(Soldier(soldier[0], soldier[1], soldier[2], soldier[3], soldier[4], int(soldier[5]), 'waiting'))
 
-    hose_1= DwellingHose('hose 1')
-    hose_2= DwellingHose('hose 2')
+    hose_1= DwellingHose('Dorm A')
+    hose_2= DwellingHose('Dorm B')
     hoses = [hose_1, hose_2]
     soldiers.sort(key=lambda x: x.distance_from_base, reverse=True)
     cur = 0 
@@ -50,4 +50,3 @@ async def upload_csv(file: UploadFile = File(...)):
             'soldiers' : soldiers
             }
 
-    
