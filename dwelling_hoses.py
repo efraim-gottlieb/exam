@@ -8,7 +8,10 @@ class Room:
     return 8 - len(self.soldiers)
     
 class DwellingHose:
+  houses_counter = 0
   def __init__(self, name):
+    DwellingHose.houses_counter += 1
+    self.id = DwellingHose.houses_counter
     self.name = name
     self.rooms = [Room(_+1) for _ in range(10)]
   def get_places(self):

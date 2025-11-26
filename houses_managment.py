@@ -25,3 +25,23 @@ class HouseManager:
                 'not_deployed_soldiers' : not_deployed_soldiers,
                 'soldiers' : soldiers
                 }
+  def get_houses_info(self):
+      houses = {}
+
+      for house in self.houses:
+        full_rooms = 0
+        empty_rooms = 0
+        partially_filled_rooms = 0
+        for room in house.rooms:
+          if room.get_places() >= 8:
+            full_rooms +=1
+          elif room.get_places() == 0:
+            empty_rooms += 1
+          else:
+            partially_filled_rooms += 1
+          houses[house.id] = {  'house': house.name,
+                                'full_rooms':full_rooms,
+                                 'partially_filled_rooms':partially_filled_rooms,
+                                 'empty_rooms':empty_rooms
+                                 }
+      return houses

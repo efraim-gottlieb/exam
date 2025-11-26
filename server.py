@@ -8,7 +8,7 @@ app = FastAPI()
 from soldier import Soldier
 from dwelling_hoses import DwellingHose
 from houses_managment import HouseManager
-a = HouseManager()
+HousesManager = HouseManager()
 
 @app.post("/assignWithCsv")
 async def upload_csv(file: UploadFile = File(...)):
@@ -24,6 +24,21 @@ async def upload_csv(file: UploadFile = File(...)):
     for soldier in reader:
         if soldier[0][0] == '8' and "".join([n for n in soldier[0] if int(n) in [i for i in range(0,10)]]) == soldier[0]:
             soldiers.append(Soldier(soldier[0], soldier[1], soldier[2], soldier[3], soldier[4], int(soldier[5]), 'waiting'))
-            
-    result = a.soldier_deployment(soldiers)
+
+    result = HousesManager.soldier_deployment(soldiers)
     return result
+
+@app.get("/space")
+def get_house_space():
+    return HousesManager.get_houses_info()
+
+@app.get("/space/{house_id}")
+def get_house_space(house_id):
+    try:
+        if int(house_id) in HousesManager.get_houses_info():
+            return HousesManager.get_houses_info()[int(house_id)]
+        else:
+            HTTPException(status_code=400, detail="house noy found")
+    except:
+        HTTPException(status_code=400, detail="enter curent id")
+
