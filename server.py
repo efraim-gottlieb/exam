@@ -49,3 +49,11 @@ def get_house_space(house_id):
 def get_waitingList():
     return {'Waiting List':[so for so in soldiers_list if so.PlacementStatus != 'assigned']}
 
+@app.get('/search/{soldier_id}')
+def get_soldier_info(soldier_id):
+    result = [so for so in soldiers_list if so.id == soldier_id]
+    if result:
+        return {'soldier info': [so for so in soldiers_list if so.id == soldier_id]}
+    else:
+        return {'error': 'soldier not found'}
+
