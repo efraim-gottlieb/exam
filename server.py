@@ -1,21 +1,23 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File
 import csv
-import io
 from DBmanager import DatabaseManager
+from soldier import Soldier
+from houses_managment import HouseManager
+
 DB_PATH = 'data.sqlite'
 DBmanager = DatabaseManager(DB_PATH)
 app = FastAPI()
-from soldier import Soldier
-from dwelling_hoses import DwellingHose
-from houses_managment import HouseManager
+
 HousesManager = HouseManager()
+
+soldiers_list= []
 
 @app.post("/assignWithCsv")
 async def upload_csv(file: UploadFile = File(...)):
     # Validate file type
     if not file.filename.endswith('.csv'):
         raise HTTPException(status_code=400, detail="File must be a CSV file")
-    
+    global soldiers_list 
     # Read file content
     csv_content = await file.read()
     # Import CSV and store in database
@@ -26,6 +28,7 @@ async def upload_csv(file: UploadFile = File(...)):
             soldiers.append(Soldier(soldier[0], soldier[1], soldier[2], soldier[3], soldier[4], int(soldier[5]), 'waiting'))
 
     result = HousesManager.soldier_deployment(soldiers)
+    soldiers_list = soldiers
     return result
 
 @app.get("/space")
@@ -41,4 +44,8 @@ def get_house_space(house_id):
             HTTPException(status_code=400, detail="house noy found")
     except:
         HTTPException(status_code=400, detail="enter curent id")
+
+@app.get('/waitingList')
+def get_waitingList():
+    return {'Waiting List':[so for so in soldiers_list if so.PlacementStatus != 'assigned']}
 
